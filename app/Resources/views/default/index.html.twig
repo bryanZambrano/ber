@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+   
+<h2>Gestion Carnet d'adresse</h2>
+
+<br/><br/>
+
+<div>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+                <a href="{{ path('fos_user_security_logout') }}">
+                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                </a>
+
+                <br/><br/>
+
+             
+              <a href="/Carnet_Adresse/web/Add/{{app.user.id}}">Ajouter un nouveau contact </a>
+               <br/><br/>
+
+               <h2>Liste des contacts :</h2>
+
+               <table border="1">
+                
+                <tr>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Numero de telephone</th>
+                <th></th>
+                 </tr>
+
+                 {% for item in listeContact %}
+
+               <tr>
+               
+              
+                  <td>{{item.getNom}}</td>
+                   <td>{{item.getPrenom}} </td>
+                   <td>{{item.getNumeroTel}} </td>
+                   <td> 
+                   <a href="/Carnet_Adresse/web/Edit/{{item.getId}}">modifier</a>
+                   <br/>
+                   <a href="/Carnet_Adresse/web/Delete/{{item.getId}}">supprimer</a>
+                    </td>
+               </tr>
+                 {% endfor %}
+
+
+               <td>
+               <tr></tr>
+               </td>
+
+               </table>
+            {% else %}
+                <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+            {% endif %}
+</div>
+
+ {% if app.request.hasPreviousSession %}
+
+
+            {% for type, messages in app.session.flashbag.all() %}
+                {% for message in messages %}
+                    <div class="flash-{{ type }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+
+        <div>
+            {% block fos_user_content %}
+            {% endblock fos_user_content %}
+        </div>
+
+
+{% endblock %}
